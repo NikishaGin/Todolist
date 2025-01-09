@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
+import React, {ChangeEvent, useState, KeyboardEvent, MouseEvent, DetailedHTMLProps, InputHTMLAttributes} from 'react';
 import {FilterValuesType} from "./App";
 
 export type PropsTasksType = {
@@ -12,6 +12,7 @@ type PropsType = {
     removeTasks: (id: string) => void
     filteredTasks: (value: FilterValuesType) => void
     addTasks: (title: string) => void
+    checkedTasks: (id: string, isDone: boolean) => void
 }
 
 export const Todolist = (props: PropsType) => {
@@ -39,9 +40,17 @@ export const Todolist = (props: PropsType) => {
 
                     const onRemoveHandler = () => props.removeTasks(task.id)
 
+                    const onCheckedHandler = (event: ChangeEvent<HTMLInputElement>) => {
+                        props.checkedTasks(task.id, event.currentTarget.checked)
+                    }
+
                     return <li key={task.id}>
                         <button onClick={onRemoveHandler}>X</button>
-                        <input type={'checkbox'} checked={task.isDone}/>{task.title}
+                        <input type={'checkbox'}
+                               onChange={onCheckedHandler}
+                               checked={task.isDone}
+                        />
+                        {task.title}
                     </li>
                 })}
             </ul>
